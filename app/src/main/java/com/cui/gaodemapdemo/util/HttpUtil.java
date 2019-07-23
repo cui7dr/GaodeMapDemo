@@ -215,3 +215,12 @@ public class HttpUtil {
         return sbf.toString();
     }
 }
+
+/**
+ *  Post 请求
+ *    请求 url 放到 headerMap 中
+ *
+ * @param paramsMap
+ * @return
+ */
+
