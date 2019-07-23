@@ -1,5 +1,7 @@
 package com.cui.gaodemapdemo.util;
 
+import android.net.UrlQuerySanitizer;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -214,13 +216,87 @@ public class HttpUtil {
         }
         return sbf.toString();
     }
-}
 
-/**
- *  Post 请求
- *    请求 url 放到 headerMap 中
- *
- * @param paramsMap
- * @return
- */
+    /**
+     * Post 请求
+     * 请求 url 放到 headerMap 中
+     *
+     * @param postStr
+     * @return
+     */
+    public String methodPost(Map<String, String> headerMap, String postStr) {
+        StringBuffer sbf = new StringBuffer();
+        // 如果是 http 协议
+        if (headerMap.get("requestURL").startsWith("https")) {
+            return this.methodHttpsPost(headerMap, postStr);
+        }
+        // 连续多次请求
+        for (int i = 0; i < 1; i++) {
+            sbf.delete(0, sbf.length());
+            HttpsURLConnection connect = null;
+            try {
+                URL url = new URL(headerMap.get("requestURL"));
+                connect = (HttpsURLConnection) url.openConnection();
+                connect.setConnectTimeout(60000);
+                connect.setReadTimeout(60000);
+                connect.setDoInput(true);
+                connect.setDoOutput(true);
+                connect.setRequestProperty("Cookie", "Hm_lvt_2d57a0f88eed9744a82604dcfa102e49=1386575661; CNZZDATA5342694=cnzz_eid%3D1753424715-1386575827-http%253A%252F%252Fwww.btctrade.com%26ntime%3D1386750475%26cnzz_a%3D5%26ltime%3D1386750483033%26rtime%3D1; pgv_pvi=8171956224; __utma=252052442.1822116731.1386640814.1386741966.1386750468.3; __utmz=252052442.1386640814.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); wafenterurl=/; wafcookie=51a45a2229469ee92bbd8cc281e98e91; __utmb=252052442.1.10.1386750468; __utmc=252052442; wafverify=afe13eda6d99c7f141d7dd3966b59d9e; USER_PW=ab3f61ee826a95e51734cf7174100382; PHPSESSID=9f2c19d6ffd0ef808ba8bac0b74ab0f3; IESESSION=alive; pgv_si=s1618283520");
+                connect.setRequestProperty("Use-Agent", "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+                for (Iterator iterator = headerMap.entrySet().iterator(); iterator.hasNext(); ) {
+                    Entry entry = (Entry) iterator.next();
+                    if (!"requestURL".equalsIgnoreCase(headerMap.get("requestURL"))) {
+                        connect.setRequestProperty(entry.getKey() + "", entry.getValue() + "");
+                    }
+                }
+                BufferedWriter bfw = new BufferedWriter(new OutputStreamWriter(connect.getOutputStream()));
+                bfw.write(postStr);
+                bfw.flush();
+                BufferedReader bfr = null;
+                // 响应码成功
+                if (connect.getResponseCode() == 200) {
+                    bfr = new BufferedReader(new InputStreamReader(connect.getInputStream(), "UTF-8"));
+                } else {
+                    if (connect.getErrorStream() != null) {
+                        bfr = new BufferedReader(new InputStreamReader(connect.getErrorStream(), "UTF-8"));
+                    } else {
+                        bfr = new BufferedReader(new InputStreamReader(connect.getInputStream(), "UTF-8"));
+                    }
+                }
+                String line = "";
+                while ((line = bfr.readLine()) != null) {
+                    sbf.append(line.trim());
+                }
+                bfr.close();
+                bfw.close();
+                break;
+            } catch (Exception e) {
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                return this.methodHttpsPost(headerMap, postStr);
+            }
+        }
+        // 没有查询到数据，调用 https
+        if (sbf.length() <= 0) {
+            return this.methodHttpsPost(headerMap, postStr);
+        }
+        return sbf.toString();
+    }
+
+    /**
+     * HttpsPost 请求
+     * 请求 url 放到 headerMap 中
+     *
+     * @param headerMap 请求头参数
+     * @param postStr
+     * @return
+     */
+    public String methodHttpsPost(Map<String, String> headerMap, String postStr) {
+
+        return null;
+    }
+}
 
