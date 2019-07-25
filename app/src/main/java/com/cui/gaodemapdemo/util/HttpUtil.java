@@ -2,7 +2,12 @@ package com.cui.gaodemapdemo.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.security.SecureRandom;
@@ -438,6 +443,89 @@ public class HttpUtil {
             if (!"true".equalsIgnoreCase(paramsMap.get("retry"))) {
                 break;
             }
+        }
+        return sbf.toString();
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param requestMap 上传文件的信息
+     * @return
+     */
+    public String methodUploadFile(Map<String, String> headerMap, Map<String, String> requestMap) {
+        String urlStr = headerMap.get("requestURL");
+        if (!urlStr.endsWith("?")) {
+            urlStr = urlStr + "?";
+        }
+        for (Iterator iterator = requestMap.entrySet().iterator(); iterator.hasNext();) {
+            Entry entry = (Entry) iterator.next();
+            String key = entry.getKey() + "";
+            String value = entry.getValue() + "";
+            urlStr = urlStr + "&" + key + "=" + value;
+        }
+        // 返回值
+        StringBuffer sbf = new StringBuffer();
+        String filePath = requestMap.get("filePath");
+        try {
+            // 换行符
+            final String newLine = "\r\n";
+            final String boundaryPrefix = "--";
+            // 定义数据分割线
+            String BOUNDRAY = "========7d4a6d158c9";
+            // 服务器的域名
+            URL url = new URL(urlStr);
+            HttpsURLConnection connect = (HttpsURLConnection) url.openConnection();
+            // 设置为 POST 请求
+            connect.setRequestMethod("POST");
+            // 发送 POST 请求必须设置如下两行
+            connect.setDoOutput(true);
+            connect.setDoInput(true);
+            connect.setUseCaches(false);
+            // 设置请求头参数
+            connect.setRequestProperty("connection", "Keep-Alive");
+            connect.setRequestProperty("Charsert", "UTF-8");
+            connect.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDRAY);
+            OutputStream out = new DataOutputStream(connect.getOutputStream());
+            // 上传文件
+            File file = new File(filePath);
+            StringBuilder sbd = new StringBuilder();
+            sbd.append(boundaryPrefix);
+            sbd.append(BOUNDRAY);
+            sbd.append(newLine);
+            // 文件参数，photo 参数名可以随意改
+            sbd.append("Content-Disposition: form-data;name=\"file\";filename=\"" + filePath + "\"" + newLine);
+            sbd.append("Content-Type:application/octet-stream");
+            // 参数头设置完以后需要两个换行
+            sbd.append(newLine);
+            sbd.append(newLine);
+            // 将参数头的数据写入到数据流中
+            out.write(sbd.toString().getBytes());
+            // 数据输入流，用于读取文件数据
+            DataInputStream in = new DataInputStream(new FileInputStream(file));
+            byte[] bufferOut = new byte[1024];
+            int bytes = 0;
+            // 每次读取 1KB 数据，并且将文件数据写入到输出流中
+            while ((bytes = in.read(bufferOut)) != -1) {
+                out.write(bufferOut, 0, bytes);
+            }
+            // 最后添加换行
+            out.write(newLine.getBytes());
+            in.close();
+            // 定义最后数据分割线
+            byte[] end_data = (newLine + boundaryPrefix + BOUNDRAY + boundaryPrefix + newLine).getBytes();
+            // 定义结尾标识
+            out.write(end_data);
+            out.flush();
+            out.close();
+            // 定义 BufferedReader 输入流来读取 URL 响应
+            BufferedReader bfr = new BufferedReader(new InputStreamReader(connect.getInputStream()));
+            String line = "";
+            while ((line = bfr.readLine()) != null) {
+                sbf.append(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return sbf.toString();
     }
