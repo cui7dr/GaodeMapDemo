@@ -370,5 +370,76 @@ public class HttpUtil {
         }
         return sbf.toString();
     }
+
+    /**
+     * Get 请求
+     *
+     * @param paramsMap 请求参数
+     * @return
+     */
+    public String methodGet(Map<String, String> paramsMap) {
+        StringBuffer sbf = new StringBuffer();
+        // 连续请求多次
+        for (int i = 0; i < 1; i++) {
+            sbf.delete(0, sbf.length());
+            StringBuffer sbf_params = new StringBuffer();
+            HttpsURLConnection connect = null;
+            try {
+                sbf_params.append(paramsMap.get("requestURL"));
+                if (!paramsMap.toString().endsWith("?") && paramsMap.size() > 1) {
+                    sbf_params.append("?");
+                }
+                for (Iterator iterator = paramsMap.entrySet().iterator(); iterator.hasNext(); ) {
+                    Entry entry = (Entry) iterator.next();
+                    if (!entry.getKey().toString().equalsIgnoreCase("requestURL")) {
+                        sbf_params.append(entry.getKey() + "=" + entry.getValue() + "&");
+                    }
+                }
+                if (sbf_params.toString().endsWith("&")) {
+                    sbf_params.delete(sbf_params.length() - 1, sbf_params.length());
+                }
+                URL url = new URL(sbf_params.toString());
+                connect = (HttpsURLConnection) url.openConnection();
+                connect.setConnectTimeout(60000);
+                connect.setReadTimeout(60000);
+                connect.setAllowUserInteraction(true);
+                connect.setDoInput(true);
+                connect.setDoOutput(false);
+                connect.setRequestProperty("Cookie", "Hm_lvt_4982d57ea12df95a2b24715fb6440726=1398138317; mstuid=1398138316637_9919; userId=10931889; XM_Hd_Start=1; Hm_lvt_7080c6a6aba51276281d5d595b080def=1398143044");
+                connect.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36");
+                BufferedReader bfr = null;
+                // 响应码成功
+                if (connect.getResponseCode() == 200) {
+                    bfr = new BufferedReader(new InputStreamReader(connect.getInputStream(), "UTF-8"));
+                } else {
+                    if (connect.getErrorStream() != null) {
+                        bfr = new BufferedReader((new InputStreamReader(connect.getErrorStream(), "UTF-8")));
+                    } else {
+                        bfr = new BufferedReader(new InputStreamReader(connect.getInputStream(), "UTF-8"));
+                    }
+                }
+                String line = "";
+                while ((line = bfr.readLine()) != null) {
+                    sbf.append(line.trim());
+                }
+                bfr.close();
+                // 响应码成功
+                if (connect.getResponseCode() == 200) {
+                    break;
+                }
+            } catch (Exception e) {
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            // 重试机制
+            if (!"true".equalsIgnoreCase(paramsMap.get("retry"))) {
+                break;
+            }
+        }
+        return sbf.toString();
+    }
 }
 
