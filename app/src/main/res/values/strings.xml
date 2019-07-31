@@ -4,4 +4,10 @@
     
     <string name="cancel">取消</string>
     <string name="setting">设置</string>
+
+    <string name="title">Designed By Cui7dr</string>
+
+    <string name="username">账号</string>
+    <string name="password">密码</string>
+    <string name="btnlogin">登录</string>
 </resources>
