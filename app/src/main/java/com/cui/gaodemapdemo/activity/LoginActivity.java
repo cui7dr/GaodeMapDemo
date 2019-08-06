@@ -9,18 +9,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cui.gaodemapdemo.R;
 import com.cui.gaodemapdemo.base.Const;
 import com.cui.gaodemapdemo.premission.Premission;
-
-import org.json.JSONObject;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 登录类
+ * 登录方法
  *
  * @author cui7dr by 2019/08/03
  */
