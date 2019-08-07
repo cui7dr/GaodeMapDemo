@@ -14,7 +14,7 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@mipmap/Cui_login" />
+            android:src="@mipmap/cui_login" />
 
         <TextView
             android:layout_width="wrap_content"
