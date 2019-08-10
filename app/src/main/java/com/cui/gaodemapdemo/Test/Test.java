@@ -19,7 +19,11 @@ public class Test {
 
     private static HttpUtils hus = new HttpUtils();
 
-    //登录方法测试
+    /**
+     * 登录测试方法
+     *
+     * @{"code":"0","info":"成功"}
+     */
     private static void getLogin() {
         JSONObject usersJson = new JSONObject();
         JSONObject urlJson = new JSONObject();
