@@ -3,6 +3,7 @@ package com.cui.gaodemapdemo.Test;
 import com.alibaba.fastjson.JSONObject;
 import com.cui.gaodemapdemo.base.Const;
 import com.cui.gaodemapdemo.util.HttpUtil;
+import com.cui.gaodemapdemo.util.HttpUtils;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 public class Test {
 
-    private static HttpUtil hu = new HttpUtil();
+    private static HttpUtils hus = new HttpUtils();
 
     //登录方法测试
     private static void getLogin() {
@@ -37,7 +38,7 @@ public class Test {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String reuslt = hu.methodPost(headerMap, paramsMap);
+        String reuslt = hus.methodPost(headerMap, paramsMap);
         String login_url=paramsMap.toString().replaceAll(", ","");
         System.out.println(reuslt);
         System.out.println(login_url);
