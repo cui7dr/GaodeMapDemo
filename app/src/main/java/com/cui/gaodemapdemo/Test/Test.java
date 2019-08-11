@@ -48,6 +48,11 @@ public class Test {
         System.out.println(login_url);
     }
 
+    /**
+     * main 方法
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         get1LoginHttputil();
     }
