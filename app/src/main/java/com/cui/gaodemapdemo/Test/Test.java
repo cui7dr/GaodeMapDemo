@@ -20,6 +20,7 @@ public class Test {
 
     /**
      * 登录测试方法
+     * ----通过 HttpUtil 请求
      *
      * @{"code":"0","info":"成功"}
      */
@@ -42,7 +43,7 @@ public class Test {
             e.printStackTrace();
         }
         String reuslt = hu.methodPost(headerMap, paramsMap);
-        String login_url=paramsMap.toString().replaceAll(", ","");
+        String login_url = paramsMap.toString().replaceAll(", ", "");
         System.out.println(reuslt);
         System.out.println(login_url);
     }
