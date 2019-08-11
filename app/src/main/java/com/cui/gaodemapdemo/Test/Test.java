@@ -20,11 +20,11 @@ public class Test {
 
     /**
      * 登录测试方法
-     * ----通过 HttpUtil 请求
      *
      * @{"code":"0","info":"成功"}
      */
-    private static void getLogin() {
+    //  1.---- 通过 HttpUtil 请求
+    private static void get1LoginHttputil() {
         JSONObject usersJson = new JSONObject();
         JSONObject urlJson = new JSONObject();
         usersJson.put("loginname", "yunwei");
@@ -49,6 +49,6 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        getLogin();
+        get1LoginHttputil();
     }
 }
