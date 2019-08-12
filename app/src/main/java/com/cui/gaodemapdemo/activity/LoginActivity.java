@@ -94,7 +94,7 @@ public class LoginActivity extends Premission {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        final String request = paramsMap.toString().replaceAll(",", "");
+        final String request = paramsMap.toString().replaceAll(", ", "");
         String url = request.substring(12, request.length() - 1);
         OkHttpUtils.get()
                 .url(url)
