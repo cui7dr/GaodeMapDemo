@@ -1,12 +1,18 @@
 package com.cui.gaodemapdemo.Test;
 
 import com.alibaba.fastjson.JSONObject;
+import com.cui.gaodemapdemo.Json2Bean.UsersBean;
 import com.cui.gaodemapdemo.base.Const;
 import com.cui.gaodemapdemo.util.HttpUtil;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.Call;
 
 /**
  * 测试类
@@ -24,7 +30,7 @@ public class Test {
      * @{"code":"0","info":"成功"}
      */
     //  1.---- 通过 HttpUtil 请求
-    private static void get1LoginHttputil() {
+    private static void getLogin1ByHttputil() {
         JSONObject usersJson = new JSONObject();
         JSONObject urlJson = new JSONObject();
         usersJson.put("loginname", "yunwei");
@@ -44,8 +50,60 @@ public class Test {
         }
         String reuslt = hu.methodPost(headerMap, paramsMap);
         String login_url = paramsMap.toString().replaceAll(", ", "");
-        System.out.println(reuslt);
-        System.out.println(login_url);
+        System.out.println("HttpUtil 请求返回 json 信息 === " + reuslt);
+        System.out.println("HttpUtil 请求链接 === " + login_url);
+    }
+
+    //  2.---- 通过 OkHttp 请求
+    private static void getLogin2ByOkHttp() {
+        JSONObject usersJson = new JSONObject();
+        JSONObject urlJson = new JSONObject();
+        usersJson.put("loginname", "xuchang");
+        usersJson.put("password", "1");
+        urlJson.put("version", Const.version);
+        urlJson.put("method", Const.method_login_xc);
+        urlJson.put("pubKey", "");
+        urlJson.put("sign", "");
+        urlJson.put("data", usersJson);
+        Map<String, String> paramsMap = new HashMap<String, String>();
+        paramsMap.put("requestURL", Const.url_xc);
+        try {
+            paramsMap.put("json", URLEncoder.encode(urlJson.toJSONString(), "UTF-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String request = paramsMap.toString().replaceAll(", ", "");
+        String login_url = request.substring(12, request.length() - 1);
+        System.out.println("OkHttp 请求链接 === " + login_url);
+        OkHttpUtils.get()
+                .url(login_url)
+                .build()
+                .connTimeOut(30000)
+                .readTimeOut(30000)
+                .writeTimeOut(30000)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int i) {
+                        System.out.println("连接超时！");
+                    }
+
+                    @Override
+                    public void onResponse(String s, int i) {
+                        Gson gson = new Gson();
+                        UsersBean usersBean = gson.fromJson(s, UsersBean.class);
+                        if (usersBean != null) {
+                            String result = usersBean.getCode();
+                            if ("0".equals(result)) {
+                                System.out.println("OkHttp 成功时返回 info 信息 === " + usersBean.getInfo());
+                            } else {
+                                System.out.println("OkHttp 失败时返回 info 信息 ===" + usersBean.getInfo());
+                            }
+                        } else {
+                            System.out.println("连接超时！");
+                        }
+                    }
+                });
+
     }
 
     /**
@@ -54,6 +112,10 @@ public class Test {
      * @param args
      */
     public static void main(String[] args) {
-        get1LoginHttputil();
+        System.out.println("1.-------通过 HttpUtil 请求-------");
+        getLogin1ByHttputil();
+        System.out.println();
+        System.out.println("2.-------通过 OkHttp 请求-------");
+        getLogin2ByOkHttp();
     }
 }
