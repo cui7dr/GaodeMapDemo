@@ -51,6 +51,7 @@
             android:id="@+id/et_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@null"
             android:singleLine="true"
             android:text="请输入账号"
             android:textSize="16sp" />
@@ -83,8 +84,10 @@
             android:id="@+id/et_pwd"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@null"
+            android:inputType="textPassword"
             android:singleLine="true"
-            android:text="请输入密码"
+            android:text="123456"
             android:textSize="16sp" />
 
     </LinearLayout>
