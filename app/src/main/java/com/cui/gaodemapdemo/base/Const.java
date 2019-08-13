@@ -22,7 +22,7 @@ public class Const {
     // 登录方法
     public static final String method_login_xc = "applogin";
     // 查看点位信息方法
-    public static final String method_pointInfo_xc = "pointInfo";
+    public static final String method_pointLatLng_xc = "pointInfo";
     // 查看点位数据方法
     public static final String method_pointData_xc = "latestPtInfoData";
     // 查看数据查询方法
