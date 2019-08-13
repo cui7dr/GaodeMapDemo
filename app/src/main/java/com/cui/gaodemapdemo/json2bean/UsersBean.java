@@ -1,4 +1,4 @@
-package com.cui.gaodemapdemo.Json2Bean;
+package com.cui.gaodemapdemo.json2bean;
 
 /**
  * 用户实体类
