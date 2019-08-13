@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.cui.gaodemapdemo.Json2Bean.UsersBean;
+import com.cui.gaodemapdemo.json2bean.UsersBean;
 import com.cui.gaodemapdemo.R;
 import com.cui.gaodemapdemo.base.Const;
 import com.cui.gaodemapdemo.premission.Premission;
