@@ -178,7 +178,10 @@ public class Test {
         System.out.println("1.-------通过 HttpUtil 请求操作 ++ 登录-------");
         getLogin1ByHttputil();
         System.out.println();
-        System.out.println("2.-------通过 OkHttp 请求操作 ++ 登录-------");
+        System.out.println("2.-------通过 HttpUtil + Gson 请求操作 ++ 登录-------");
+        getLogin1ByHttputil();
+        System.out.println();
+        System.out.println("3.-------通过 OkHttp 请求操作 ++ 登录-------");
         getLogin2ByOkHttp();
         System.out.println();
         System.out.println("1.-------通过 HttpUtil 获取 ++ 点位经纬度-------");
