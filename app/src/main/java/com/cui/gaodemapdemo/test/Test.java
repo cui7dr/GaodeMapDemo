@@ -1,7 +1,7 @@
-package com.cui.gaodemapdemo.Test;
+package com.cui.gaodemapdemo.test;
 
 import com.alibaba.fastjson.JSONObject;
-import com.cui.gaodemapdemo.Json2Bean.UsersBean;
+import com.cui.gaodemapdemo.json2bean.UsersBean;
 import com.cui.gaodemapdemo.base.Const;
 import com.cui.gaodemapdemo.util.HttpUtil;
 import com.google.gson.Gson;
