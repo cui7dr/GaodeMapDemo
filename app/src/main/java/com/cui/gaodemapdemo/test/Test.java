@@ -1,8 +1,8 @@
 package com.cui.gaodemapdemo.test;
 
 import com.alibaba.fastjson.JSONObject;
-import com.cui.gaodemapdemo.json2bean.UsersBean;
 import com.cui.gaodemapdemo.base.Const;
+import com.cui.gaodemapdemo.json2bean.UsersBean;
 import com.cui.gaodemapdemo.util.HttpUtil;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -92,7 +92,7 @@ public class Test {
     }
 
     //  3.---- 通过 OkHttp 请求
-    private static void getLogin2ByOkHttp() {
+    private static void getLogin3ByOkHttp() {
         JSONObject usersJson = new JSONObject();
         JSONObject urlJson = new JSONObject();
         usersJson.put("loginname", "xuchang");
@@ -109,7 +109,7 @@ public class Test {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String request = paramsMap.toString().replaceAll(", ", "");
+        final String request = paramsMap.toString().replaceAll(", ", "");
         String login_url = request.substring(12, request.length() - 1);
         System.out.println("OkHttp 请求链接 === " + login_url);
         OkHttpUtils.get()
@@ -179,10 +179,10 @@ public class Test {
         getLogin1ByHttputil();
         System.out.println();
         System.out.println("2.-------通过 HttpUtil + Gson 请求操作 ++ 登录-------");
-        getLogin1ByHttputil();
+        getLogin2ByHttpUtilAddGson();
         System.out.println();
         System.out.println("3.-------通过 OkHttp 请求操作 ++ 登录-------");
-        getLogin2ByOkHttp();
+        getLogin3ByOkHttp();
         System.out.println();
         System.out.println("1.-------通过 HttpUtil 获取 ++ 点位经纬度-------");
         getLatLng1HttpUtil();
