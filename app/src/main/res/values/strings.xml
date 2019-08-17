@@ -10,4 +10,9 @@
     <string name="username">账号</string>
     <string name="password">密码</string>
     <string name="btnlogin">登录</string>
+
+    <string name="time">时间</string>
+    <string name="no">NO</string>
+    <string name="opaque">不透光</string>
+    <string name="result">判定结果</string>
 </resources>
