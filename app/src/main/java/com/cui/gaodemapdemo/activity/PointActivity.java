@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
@@ -17,6 +19,13 @@ import com.cui.gaodemapdemo.R;
 
 public class PointActivity extends AppCompatActivity {
 
+    private TextView tv_hphm;
+    private TextView tv_time;
+    private TextView tv_no;
+    private TextView tv_opaque;
+    private TextView tv_result;
+    private LinearLayout title;
+    private LinearLayout context;
     private AMap aMap;
     private MapView mapView;
     private Marker marker;
@@ -47,23 +56,25 @@ public class PointActivity extends AppCompatActivity {
         // 百度经纬度
         double bd_lng=113.666136;
         double bd_lat=34.752394;
+        // 许昌各站点近似中心点
+        double xc_lng=113.763535;
+        double xc_lat=33.967344;
         LatLng gd_latlng = new LatLng(gd_lat, gd_lng);
         LatLng bd_latlng=new LatLng(bd_lat,bd_lng);
+        LatLng xc_latlng=new LatLng(xc_lat,xc_lng);
         CoordinateConverter converter=new CoordinateConverter();
         // CoordType 待转换坐标类型（GPS/Google/Baidu...
         converter.from(CoordinateConverter.CoordType.BAIDU);
         // 待转换坐标点
         converter.coord(bd_latlng);
         // 执行转换操作
-        LatLng desLatlng=converter.convert();
         MarkerOptions options = new MarkerOptions();
         options.position(gd_latlng);
         // 显示转换后坐标
-        //options.position(desLatlng);
         marker=aMap.addMarker(options);
         marker.showInfoWindow();
         // 中心点
-        aMap.moveCamera(CameraUpdateFactory.changeLatLng(gd_latlng));
+        aMap.moveCamera(CameraUpdateFactory.changeLatLng(xc_latlng));
         // 缩放比例
         aMap.moveCamera(CameraUpdateFactory.zoomTo(12));
         // 隐藏缩放按钮
