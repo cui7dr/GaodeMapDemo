@@ -2,12 +2,15 @@ package com.cui.gaodemapdemo.activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.CoordinateConverter;
@@ -16,6 +19,12 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.cui.gaodemapdemo.R;
+import com.cui.gaodemapdemo.base.Const;
+import com.cui.gaodemapdemo.util.HttpUtil;
+
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PointActivity extends AppCompatActivity {
 
@@ -29,6 +38,7 @@ public class PointActivity extends AppCompatActivity {
     private AMap aMap;
     private MapView mapView;
     private Marker marker;
+    private HttpUtil hu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +64,15 @@ public class PointActivity extends AppCompatActivity {
         double gd_lng = 113.658109;// 经度
         double gd_lat = 34.745803;// 纬度
         // 百度经纬度
-        double bd_lng=113.666136;
-        double bd_lat=34.752394;
+        double bd_lng = 113.666136;
+        double bd_lat = 34.752394;
         // 许昌各站点近似中心点
-        double xc_lng=113.763535;
-        double xc_lat=33.967344;
+        double xc_lng = 113.763535;
+        double xc_lat = 33.967344;
         LatLng gd_latlng = new LatLng(gd_lat, gd_lng);
-        LatLng bd_latlng=new LatLng(bd_lat,bd_lng);
-        LatLng xc_latlng=new LatLng(xc_lat,xc_lng);
-        CoordinateConverter converter=new CoordinateConverter();
+        LatLng bd_latlng = new LatLng(bd_lat, bd_lng);
+        LatLng xc_latlng = new LatLng(xc_lat, xc_lng);
+        CoordinateConverter converter = new CoordinateConverter();
         // CoordType 待转换坐标类型（GPS/Google/Baidu...
         converter.from(CoordinateConverter.CoordType.BAIDU);
         // 待转换坐标点
@@ -71,7 +81,7 @@ public class PointActivity extends AppCompatActivity {
         MarkerOptions options = new MarkerOptions();
         options.position(gd_latlng);
         // 显示转换后坐标
-        marker=aMap.addMarker(options);
+        marker = aMap.addMarker(options);
         marker.showInfoWindow();
         // 中心点
         aMap.moveCamera(CameraUpdateFactory.changeLatLng(xc_latlng));
@@ -79,6 +89,34 @@ public class PointActivity extends AppCompatActivity {
         aMap.moveCamera(CameraUpdateFactory.zoomTo(12));
         // 隐藏缩放按钮
         aMap.getUiSettings().setZoomControlsEnabled(false);
+    }
+
+    private void initView() {
+//        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+//            getWindow().setNavigationBarColor(ContextCompat.getColor(this,R.color));
+//        }
+        initData();
+
+    }
+
+    //获取所有数据----(HttpUtil + Gson
+    private void initData() {
+        JSONObject urlJson = new JSONObject();
+        JSONObject paramsJson = new JSONObject();
+        urlJson.put("version", Const.version);
+        urlJson.put("method", Const.method_pointLatLng_xc);
+        urlJson.put("pubKey", "");
+        urlJson.put("sign", "");
+        urlJson.put("data", paramsJson);
+        Map<String, String> headerMap = new HashMap<String, String>();
+        Map<String, String> paramsMap = new HashMap<String, String>();
+        paramsMap.put("requestURL", Const.url_xc);
+        try {
+            paramsMap.put("json", URLEncoder.encode(urlJson.toJSONString(), "UTF-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String result = hu.methodHttpsPost(headerMap, paramsMap);
     }
 
     /**
