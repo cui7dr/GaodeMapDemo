@@ -145,9 +145,11 @@ public class Test {
 
     /**
      * 测试获取点位经纬度方法
+     *
+     * @{"code":"0","data":{"data_info":[{"ddwd":33.987567,"ddjd":113.862191,"jzmc":"南外环梨园转盘","jzbh":"A411023001","id":1,"status":1},{"ddwd":33.974457,"ddjd":113.663660,"jzmc":"许南路椹涧超限站","jzbh":"A411023002","id":4,"status":1},{"ddwd":34.060290,"ddjd":113.710969,"jzmc":"许禹路禹毫铁路桥","jzbh":"A411023003","id":9,"status":1},{"ddwd":33.980772,"ddjd":113.823672,"jzmc":"南外环许繁路","jzbh":"B411023004","id":10,"status":1},{"ddwd":0.000000,"ddjd":0.000000,"jzmc":"市一号遥感车","jzbh":"C411023005","id":11,"status":1},{"ddwd":0.000000,"ddjd":0.000000,"jzmc":"市二号遥感车","jzbh":"C411023006","id":12,"status":1},{"ddwd":34.060035,"ddjd":114.205041,"jzmc":"鄢陵县","jzbh":"A411024001","id":13,"status":1},{"ddwd":34.127870,"ddjd":113.542519,"jzmc":"禹州市","jzbh":"B411081001","id":14,"status":1}],"page_data":{"currentPage":1,"currentRecord":0,"nextPage":1,"pageSize":20,"prePage":1,"totalPage":1,"totalRecord":8}},"info":"成功"}
      */
-    //  1.---- 通过 HttpUtil 获取
-    private static void getLatLng1HttpUtil(){
+    //  1.---- 通过 HttpUtil 获取经纬度
+    private static void getLatlng1HttpUtil() {
         JSONObject PointLatLngJson = new JSONObject();
         JSONObject urlJson = new JSONObject();
         urlJson.put("version", Const.version);
@@ -163,10 +165,47 @@ public class Test {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String result=hu.methodPost(headerMap, paramsMap);
+        String result = hu.methodPost(headerMap, paramsMap);
         String login_url = paramsMap.toString().replaceAll(", ", "");
         System.out.println("HttpUtil 请求返回 json 信息 === " + result);
         System.out.println("HttpUtil 请求链接 === " + login_url);
+    }
+
+    //  2.---- 通过 HttpUtil + Gson 获取经纬度
+    private static void getLatlng2ByHttpUtilAddGson() {
+        JSONObject usersJson = new JSONObject();
+        JSONObject urlJson = new JSONObject();
+        usersJson.put("loginname", "yunwei");
+        usersJson.put("password", "xinghe123");
+        urlJson.put("version", Const.version);
+        urlJson.put("method", Const.method_login_xc);
+        urlJson.put("pubKey", "");
+        urlJson.put("sign", "");
+        urlJson.put("data", usersJson);
+        Map<String, String> headerMap = new HashMap<String, String>();
+        Map<String, String> paramsMap = new HashMap<String, String>();
+        paramsMap.put("requestURL", Const.url_xc);
+        try {
+            paramsMap.put("json", URLEncoder.encode(urlJson.toJSONString(), "UTF-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String result = hu.methodPost(headerMap, paramsMap);
+        String login_url = paramsMap.toString().replaceAll(", ", "");
+        System.out.println("HttpUtil 请求返回 json 信息 === " + result);
+        System.out.println("HttpUtil 请求链接 === " + login_url);
+        Gson gson = new Gson();
+        UsersBean usersBean = gson.fromJson(result, UsersBean.class);
+        if (usersBean != null) {
+            String code = usersBean.getCode();
+            if ("0".equals(code)) {
+                System.out.println("HttpUtil + Gson 成功时返回 info 信息 === " + usersBean.getInfo());
+            } else {
+                System.out.println("HttpUtil + Gson 失败时返回 info 信息 ===" + usersBean.getInfo());
+            }
+        } else {
+            System.out.println("HttpUtil + Gson 连接超时！");
+        }
     }
 
     /**
@@ -185,6 +224,8 @@ public class Test {
         getLogin3ByOkHttp();
         System.out.println();
         System.out.println("1.-------通过 HttpUtil 获取 ++ 点位经纬度-------");
-        getLatLng1HttpUtil();
+        getLatlng1HttpUtil();
+        System.out.println();
+        System.out.println("2.-------通过 HttpUtil + Gson 获取 ++ 点位经纬度-------");
     }
 }
