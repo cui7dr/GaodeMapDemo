@@ -4,6 +4,8 @@ package com.cui.gaodemapdemo.json2bean;
  * 用户实体类
  *
  * @author cui7dr by 2019/08/04
+ *
+ * @"code":"0","info":"成功"}
  */
 
 public class UsersBean {
