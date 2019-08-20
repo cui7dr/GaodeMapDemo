@@ -23,12 +23,12 @@ public class LatlngBean {
         this.code = code;
     }
 
-    public LatlngData getData() {
+    public LatlngData getLatlngData() {
         return latlngdata;
     }
 
-    public void setData(LatlngData data) {
-        this.latlngdata = data;
+    public void setLatlngData(LatlngData latlngdata) {
+        this.latlngdata = latlngdata;
     }
 
     public String getInfo() {
