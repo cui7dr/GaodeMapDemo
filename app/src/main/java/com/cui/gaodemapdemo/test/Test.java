@@ -2,6 +2,7 @@ package com.cui.gaodemapdemo.test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cui.gaodemapdemo.base.Const;
+import com.cui.gaodemapdemo.json2bean.LatlngBean;
 import com.cui.gaodemapdemo.json2bean.UsersBean;
 import com.cui.gaodemapdemo.util.HttpUtil;
 import com.google.gson.Gson;
@@ -50,8 +51,8 @@ public class Test {
         }
         String result = hu.methodPost(headerMap, paramsMap);
         String login_url = paramsMap.toString().replaceAll(", ", "");
-        System.out.println("HttpUtil 请求返回 json 信息 === " + result);
-        System.out.println("HttpUtil 请求链接 === " + login_url);
+        System.out.println("HttpUtil 登录1请求返回 json 信息 === " + result);
+        System.out.println("HttpUtil 登录1请求链接 === " + login_url);
     }
 
     //  2.---- 通过 HttpUtil + Gson 获取返回信息
@@ -75,19 +76,19 @@ public class Test {
         }
         String result = hu.methodPost(headerMap, paramsMap);
         String login_url = paramsMap.toString().replaceAll(", ", "");
-        System.out.println("HttpUtil 请求返回 json 信息 === " + result);
-        System.out.println("HttpUtil 请求链接 === " + login_url);
+        System.out.println("HttpUtil 登录2请求返回 json 信息 === " + result);
+        System.out.println("HttpUtil 登录2请求链接 === " + login_url);
         Gson gson = new Gson();
         UsersBean usersBean = gson.fromJson(result, UsersBean.class);
         if (usersBean != null) {
             String code = usersBean.getCode();
             if ("0".equals(code)) {
-                System.out.println("HttpUtil + Gson 成功时返回 info 信息 === " + usersBean.getInfo());
+                System.out.println("HttpUtil + Gson 登录2成功时返回 info 信息 === " + usersBean.getInfo());
             } else {
-                System.out.println("HttpUtil + Gson 失败时返回 info 信息 ===" + usersBean.getInfo());
+                System.out.println("HttpUtil + Gson 僧录2失败时返回 info 信息 ===" + usersBean.getInfo());
             }
         } else {
-            System.out.println("HttpUtil + Gson 连接超时！");
+            System.out.println("HttpUtil + Gson 登录2连接超时！");
         }
     }
 
@@ -111,7 +112,7 @@ public class Test {
         }
         final String request = paramsMap.toString().replaceAll(", ", "");
         String login_url = request.substring(12, request.length() - 1);
-        System.out.println("OkHttp 请求链接 === " + login_url);
+        System.out.println("OkHttp 登录3请求链接 === " + login_url);
         OkHttpUtils.get()
                 .url(login_url)
                 .build()
@@ -121,7 +122,7 @@ public class Test {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int i) {
-                        System.out.println("连接超时！");
+                        System.out.println("登录3连接超时！");
                     }
 
                     @Override
@@ -131,12 +132,12 @@ public class Test {
                         if (usersBean != null) {
                             String result = usersBean.getCode();
                             if ("0".equals(result)) {
-                                System.out.println("OkHttp 成功时返回 info 信息 === " + usersBean.getInfo());
+                                System.out.println("OkHttp 登录3成功时返回 info 信息 === " + usersBean.getInfo());
                             } else {
-                                System.out.println("OkHttp 失败时返回 info 信息 ===" + usersBean.getInfo());
+                                System.out.println("OkHttp 登录3失败时返回 info 信息 ===" + usersBean.getInfo());
                             }
                         } else {
-                            System.out.println("连接超时！");
+                            System.out.println("登录3连接超时！");
                         }
                     }
                 });
@@ -166,22 +167,20 @@ public class Test {
             e.printStackTrace();
         }
         String result = hu.methodPost(headerMap, paramsMap);
-        String login_url = paramsMap.toString().replaceAll(", ", "");
-        System.out.println("HttpUtil 请求返回 json 信息 === " + result);
-        System.out.println("HttpUtil 请求链接 === " + login_url);
+        String latlng_url = paramsMap.toString().replaceAll(", ", "");
+        System.out.println("HttpUtil 请求经纬度1返回 json 信息 === " + result);
+        System.out.println("HttpUtil 请求经纬度1链接 === " + latlng_url);
     }
 
     //  2.---- 通过 HttpUtil + Gson 获取经纬度
     private static void getLatlng2ByHttpUtilAddGson() {
-        JSONObject usersJson = new JSONObject();
+        JSONObject PointLatLngJson = new JSONObject();
         JSONObject urlJson = new JSONObject();
-        usersJson.put("loginname", "yunwei");
-        usersJson.put("password", "xinghe123");
         urlJson.put("version", Const.version);
-        urlJson.put("method", Const.method_login_xc);
+        urlJson.put("method", Const.method_pointLatLng_xc);
         urlJson.put("pubKey", "");
         urlJson.put("sign", "");
-        urlJson.put("data", usersJson);
+        urlJson.put("data", PointLatLngJson);
         Map<String, String> headerMap = new HashMap<String, String>();
         Map<String, String> paramsMap = new HashMap<String, String>();
         paramsMap.put("requestURL", Const.url_xc);
@@ -191,20 +190,30 @@ public class Test {
             e.printStackTrace();
         }
         String result = hu.methodPost(headerMap, paramsMap);
-        String login_url = paramsMap.toString().replaceAll(", ", "");
-        System.out.println("HttpUtil 请求返回 json 信息 === " + result);
-        System.out.println("HttpUtil 请求链接 === " + login_url);
+        String latlng_url = paramsMap.toString().replaceAll(", ", "");
+        System.out.println("HttpUtil 请求经纬度2返回 json 信息 === " + result);
+        System.out.println("HttpUtil 请求经纬度2链接 === " + latlng_url);
         Gson gson = new Gson();
-        UsersBean usersBean = gson.fromJson(result, UsersBean.class);
-        if (usersBean != null) {
-            String code = usersBean.getCode();
+        LatlngBean latlngBean = gson.fromJson(result, LatlngBean.class);
+        if (latlngBean != null) {
+            String code = latlngBean.getCode();
             if ("0".equals(code)) {
-                System.out.println("HttpUtil + Gson 成功时返回 info 信息 === " + usersBean.getInfo());
+                System.out.println("HttpUtil + Gson 获取经纬度2成功时返回 info 信息 === " + latlngBean.getInfo());
+                System.out.println(latlngBean.getLatlngData());
+                LatlngBean.LatlngData llb_lld = latlngBean.getLatlngData();
+                if (llb_lld.getDataInfo().size() > 0) {
+                    for (int i = 0; i < llb_lld.getDataInfo().size(); i++) {
+                        double wd = llb_lld.getDataInfo().get(i).getDdwd();
+                        double jd = llb_lld.getDataInfo().get(i).getDdjd();
+                        String mc = llb_lld.getDataInfo().get(i).getJzmc();
+                        System.out.println("站点名称：" + mc + "----经度：" + jd + "----纬度：" + wd);
+                    }
+                }
             } else {
-                System.out.println("HttpUtil + Gson 失败时返回 info 信息 ===" + usersBean.getInfo());
+                System.out.println("HttpUtil + Gson 获取经纬度2失败时返回 info 信息 ===" + latlngBean.getInfo());
             }
         } else {
-            System.out.println("HttpUtil + Gson 连接超时！");
+            System.out.println("HttpUtil + Gson 获取经纬度2连接超时！");
         }
     }
 
@@ -227,5 +236,6 @@ public class Test {
         getLatlng1HttpUtil();
         System.out.println();
         System.out.println("2.-------通过 HttpUtil + Gson 获取 ++ 点位经纬度-------");
+        getLatlng2ByHttpUtilAddGson();
     }
 }
