@@ -147,7 +147,23 @@ public class Test {
     /**
      * 测试获取点位经纬度方法
      *
-     * @{"code":"0","data":{"data_info":[{"ddwd":33.987567,"ddjd":113.862191,"jzmc":"南外环梨园转盘","jzbh":"A411023001","id":1,"status":1},{"ddwd":33.974457,"ddjd":113.663660,"jzmc":"许南路椹涧超限站","jzbh":"A411023002","id":4,"status":1},{"ddwd":34.060290,"ddjd":113.710969,"jzmc":"许禹路禹毫铁路桥","jzbh":"A411023003","id":9,"status":1},{"ddwd":33.980772,"ddjd":113.823672,"jzmc":"南外环许繁路","jzbh":"B411023004","id":10,"status":1},{"ddwd":0.000000,"ddjd":0.000000,"jzmc":"市一号遥感车","jzbh":"C411023005","id":11,"status":1},{"ddwd":0.000000,"ddjd":0.000000,"jzmc":"市二号遥感车","jzbh":"C411023006","id":12,"status":1},{"ddwd":34.060035,"ddjd":114.205041,"jzmc":"鄢陵县","jzbh":"A411024001","id":13,"status":1},{"ddwd":34.127870,"ddjd":113.542519,"jzmc":"禹州市","jzbh":"B411081001","id":14,"status":1}],"page_data":{"currentPage":1,"currentRecord":0,"nextPage":1,"pageSize":20,"prePage":1,"totalPage":1,"totalRecord":8}},"info":"成功"}
+     * {"code":"0",
+     * <p>
+     * "data":
+     * {"data_info":
+     * [{"ddwd":33.987567,"ddjd":113.862191,"jzmc":"南外环梨园转盘","jzbh":"A411023001","id":1,"status":1},
+     * {"ddwd":33.974457,"ddjd":113.663660,"jzmc":"许南路椹涧超限站","jzbh":"A411023002","id":4,"status":1},
+     * {"ddwd":34.060290,"ddjd":113.710969,"jzmc":"许禹路禹毫铁路桥","jzbh":"A411023003","id":9,"status":1},
+     * {"ddwd":33.980772,"ddjd":113.823672,"jzmc":"南外环许繁路","jzbh":"B411023004","id":10,"status":1},
+     * {"ddwd":0.000000,"ddjd":0.000000,"jzmc":"市一号遥感车","jzbh":"C411023005","id":11,"status":1},
+     * {"ddwd":0.000000,"ddjd":0.000000,"jzmc":"市二号遥感车","jzbh":"C411023006","id":12,"status":1},
+     * {"ddwd":34.060035,"ddjd":114.205041,"jzmc":"鄢陵县","jzbh":"A411024001","id":13,"status":1},
+     * {"ddwd":34.127870,"ddjd":113.542519,"jzmc":"禹州市","jzbh":"B411081001","id":14,"status":1}],
+     * <p>
+     * "page_data":
+     * {"currentPage":1,"currentRecord":0,"nextPage":1,"pageSize":20,"prePage":1,"totalPage":1,"totalRecord":8}},
+     * <p>
+     * "info":"成功"}
      */
     //  1.---- 通过 HttpUtil 获取经纬度
     private static void getLatlng1HttpUtil() {
@@ -199,13 +215,12 @@ public class Test {
             String code = latlngBean.getCode();
             if ("0".equals(code)) {
                 System.out.println("HttpUtil + Gson 获取经纬度2成功时返回 info 信息 === " + latlngBean.getInfo());
-                System.out.println(latlngBean.getLatlngData());
-                LatlngBean.LatlngData llb_lld = latlngBean.getLatlngData();
-                if (llb_lld.getDataInfo().size() > 0) {
-                    for (int i = 0; i < llb_lld.getDataInfo().size(); i++) {
-                        double wd = llb_lld.getDataInfo().get(i).getDdwd();
-                        double jd = llb_lld.getDataInfo().get(i).getDdjd();
-                        String mc = llb_lld.getDataInfo().get(i).getJzmc();
+                LatlngBean.DataBean llb_lld = latlngBean.getData();
+                if (llb_lld.getData_info().size() > 0) {
+                    for (int i = 0; i < llb_lld.getData_info().size(); i++) {
+                        double wd = llb_lld.getData_info().get(i).getDdwd();
+                        double jd = llb_lld.getData_info().get(i).getDdjd();
+                        String mc = llb_lld.getData_info().get(i).getJzmc();
                         System.out.println("站点名称：" + mc + "----经度：" + jd + "----纬度：" + wd);
                     }
                 }
