@@ -2,13 +2,12 @@ package com.cui.gaodemapdemo.activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.amap.api.maps2d.AMap;
@@ -20,11 +19,19 @@ import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.cui.gaodemapdemo.R;
 import com.cui.gaodemapdemo.base.Const;
+import com.cui.gaodemapdemo.json2bean.LatlngBean;
 import com.cui.gaodemapdemo.util.HttpUtil;
+import com.google.gson.Gson;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+
+/**
+ *点位信息方法
+ *
+ * @author cui7dr by 2019/08/21
+ */
 
 public class PointActivity extends AppCompatActivity {
 
@@ -117,6 +124,28 @@ public class PointActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         String result = hu.methodHttpsPost(headerMap, paramsMap);
+        Gson gson = new Gson();
+        LatlngBean latlngBean = gson.fromJson(result, LatlngBean.class);
+        if (latlngBean != null) {
+            String code = latlngBean.getCode();
+            if ("0".equals(code)) {
+                LatlngBean.DataBean llb_lld = latlngBean.getData();
+                if (llb_lld.getData_info().size() > 0) {
+                    for (int i = 0; i < llb_lld.getData_info().size(); i++) {
+                        LatLng latLng = new LatLng(llb_lld.getData_info().get(i).getDdwd(), llb_lld.getData_info().get(i).getDdjd());
+                        MarkerOptions options = new MarkerOptions();
+                        if ("(0,0)" != latLng.toString()) {
+                            options.position(latLng);
+                            options.title(llb_lld.getData_info().get(i).getJzmc());
+                        }
+                        marker = aMap.addMarker(options);
+                        marker.showInfoWindow();
+                    }
+                }
+            } else {
+                Toast.makeText(PointActivity.this, latlngBean.getInfo() + "", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**
