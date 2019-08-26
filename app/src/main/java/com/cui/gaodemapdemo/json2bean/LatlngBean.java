@@ -2,18 +2,26 @@ package com.cui.gaodemapdemo.json2bean;
 
 import java.util.List;
 
-/**
- * 站点经纬度信息实体类
- *
- * @author cui7dr by 2019/08/19
- * @{"code":"0","data":{"data_info":[{"ddwd":33.987567,"ddjd":113.862191,"jzmc":"南外环梨园转盘","jzbh":"A411023001","id":1,"status":1}],"page_data":{"currentPage":1,"currentRecord":0,"nextPage":1,"pageSize":20,"prePage":1,"totalPage":1,"totalRecord":8}},"info":"成功"}
- * @remark TY in 2019/08/19
- */
-
 public class LatlngBean {
+    /**
+     * 站点经纬度信息实体类
+     *
+     * @author cui7dr by 2019/08/19
+     * <br/>
+     * {"code":"0",
+     * <p>
+     * "data":{"data_info":[{"ddwd":33.987567,"ddjd":113.862191,"jzmc":"南外环梨园转盘","jzbh":"A411023001","id":1,"status":1}],
+     * <p>
+     * "page_data":{"currentPage":1,"currentRecord":0,"nextPage":1,"pageSize":20,"prePage":1,"totalPage":1,"totalRecord":8}},
+     * <p>
+     * "info":"成功"}
+     * <br/>
+     * @remark TY in 2019/08/19
+     */
+
     private String code;
-    private LatlngData latlngdata;
     private String info;
+    private DataBean data;
 
     public String getCode() {
         return code;
@@ -21,14 +29,6 @@ public class LatlngBean {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public LatlngData getLatlngData() {
-        return latlngdata;
-    }
-
-    public void setLatlngData(LatlngData latlngdata) {
-        this.latlngdata = latlngdata;
     }
 
     public String getInfo() {
@@ -39,42 +39,52 @@ public class LatlngBean {
         this.info = info;
     }
 
+    public DataBean getData() {
+        return data;
+    }
+
+    public void setData(DataBean data) {
+        this.data = data;
+    }
+
+
     /**
      * "data":
      * {"data_info":[{"ddwd":33.987567,"ddjd":113.862191,"jzmc":"南外环梨园转盘","jzbh":"A411023001","id":1,"status":1}],
+     * <br/>
      * "page_data":{"currentPage":1,"currentRecord":0,"nextPage":1,"pageSize":20,"prePage":1,"totalPage":1,"totalRecord":8}}
      */
-    public static class LatlngData {
-        private List<DataInfo> dataInfo;
-        private PageData pageData;
+    public static class DataBean {
+        private List<LatlngDataBean> data_info;
+        private PageDataBean page_data;
 
-        public List<DataInfo> getDataInfo() {
-            return dataInfo;
+        public List<LatlngDataBean> getData_info() {
+            return data_info;
         }
 
-        public void setDataInfo(List<DataInfo> dataInfo) {
-            this.dataInfo = dataInfo;
+        public void setData_info(List<LatlngDataBean> data_info) {
+            this.data_info = data_info;
         }
 
-        public PageData getPageData() {
-            return pageData;
+        public PageDataBean getPage_data() {
+            return page_data;
         }
 
-        public void setPageData(PageData pageData) {
-            this.pageData = pageData;
+        public void setPage_data(PageDataBean page_data) {
+            this.page_data = page_data;
         }
 
         /**
          * "data_info":
          * [{"ddwd":33.987567,"ddjd":113.862191,"jzmc":"南外环梨园转盘","jzbh":"A411023001","id":1,"status":1}]
          */
-        public static class DataInfo {
-            private double ddwd; //地点维度
-            private double ddjd; //地点经度
-            private String jzmc; //检测名称
-            private String jzbh; //检测编号
+        public static class LatlngDataBean {
+            private double ddwd;
+            private double ddjd;
+            private String jzmc;
+            private String jzbh;
             private int id;
-            private int status;
+            private int state;
 
             public double getDdwd() {
                 return ddwd;
@@ -116,20 +126,21 @@ public class LatlngBean {
                 this.id = id;
             }
 
-            public int getStatus() {
-                return status;
+            public int getState() {
+                return state;
             }
 
-            public void setStatus(int status) {
-                this.status = status;
+            public void setState(int state) {
+                this.state = state;
             }
+
         }
 
         /**
          * page_data":
          * {"currentPage":1,"currentRecord":0,"nextPage":1,"pageSize":20,"prePage":1,"totalPage":1,"totalRecord":8}
          */
-        public static class PageData {
+        public static class PageDataBean {
             private int currentPage;
             private int currentRecord;
             private int nextPage;
@@ -193,6 +204,7 @@ public class LatlngBean {
             public void setTotalRecord(int totalRecord) {
                 this.totalRecord = totalRecord;
             }
+
         }
     }
 }
