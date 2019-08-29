@@ -22,10 +22,15 @@ import com.cui.gaodemapdemo.base.Const;
 import com.cui.gaodemapdemo.json2bean.LatlngBean;
 import com.cui.gaodemapdemo.util.HttpUtil;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.Call;
 
 /**
  *点位信息方法
@@ -46,6 +51,7 @@ public class PointActivity extends AppCompatActivity {
     private MapView mapView;
     private Marker marker;
     private HttpUtil hu;
+    private String id="1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,7 @@ public class PointActivity extends AppCompatActivity {
         setContentView(R.layout.activity_point);
         // 初始化并操作地图
         operationMap(savedInstanceState);
+        initView();
     }
 
     // 初始化地图的控件
@@ -102,12 +109,12 @@ public class PointActivity extends AppCompatActivity {
 //        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
 //            getWindow().setNavigationBarColor(ContextCompat.getColor(this,R.color));
 //        }
-        initData();
+        getLatlng();
 
     }
 
-    //获取所有数据----(HttpUtil + Gson
-    private void initData() {
+    //获取所有站点经纬度数据----(HttpUtil + Gson
+    private void getLatlng() {
         JSONObject urlJson = new JSONObject();
         JSONObject paramsJson = new JSONObject();
         urlJson.put("version", Const.version);
@@ -146,6 +153,64 @@ public class PointActivity extends AppCompatActivity {
                 Toast.makeText(PointActivity.this, latlngBean.getInfo() + "", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    // 获取站点 id (HttpUtil + OkHttp
+    private void getId(){
+        title=(LinearLayout)findViewById(R.id.linearTitle);
+        context=(LinearLayout)findViewById(R.id.linearTitle);
+        tv_hphm=(TextView)findViewById(R.id.tv_hphm);
+        tv_time=(TextView)findViewById(R.id.tv_time);
+        tv_no=(TextView)findViewById(R.id.tv_no);
+        tv_opaque=(TextView)findViewById(R.id.tv_opaque);
+        tv_result=(TextView)findViewById(R.id.tv_result);
+        aMap.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker1) {
+                String pointTitle=marker1.getTitle();
+                if ("南外环梨园转盘".equals(pointTitle)) {
+                    id = "1";
+                } else if ("许南路椹涧超限站".equals(pointTitle)) {
+                    id = "4";
+                } else if ("许禹路禹毫铁路桥".equals(pointTitle)) {
+                    id = "9";
+                } else if("南外环许繁路".equals(pointTitle)){
+                    id = "10";
+                }else{
+                    id="1";
+                }
+                JSONObject urlJson = new JSONObject();
+                JSONObject paramsJson = new JSONObject();
+                urlJson.put("version", Const.version);
+                urlJson.put("method", Const.method_pointData_xc);
+                urlJson.put("pubKey", "");
+                urlJson.put("sign", "");
+                urlJson.put("data", paramsJson);
+                Map<String, String> headerMap = new HashMap<String, String>();
+                Map<String, String> paramsMap = new HashMap<String, String>();
+                paramsMap.put("requestURL", Const.url_xc);
+                try {
+                    paramsMap.put("json", URLEncoder.encode(urlJson.toJSONString(), "UTF-8"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                String request=paramsJson.toString().replaceAll(", ","");
+                String url=request.substring(12,request.length()-1);
+                OkHttpUtils.get().url(url).build().connTimeOut(30000).readTimeOut(30000).writeTimeOut(30000).execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int i) {
+                        Toast.makeText(PointActivity.this,Const.OUT_TIME,Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onResponse(String s, int i) {
+                        Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+
+                    }
+                });
+                return false;
+            }
+        });
     }
 
     /**
