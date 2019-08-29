@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author cui7dr by 2019/08/19
  *
- * @remark TY in 2019/08/19
+ * @remark TY in 2019/08/19 my dreams
  */
 public class LatlngBean {
     /**
