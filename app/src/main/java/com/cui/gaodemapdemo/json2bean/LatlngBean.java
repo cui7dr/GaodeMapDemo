@@ -2,12 +2,15 @@ package com.cui.gaodemapdemo.json2bean;
 
 import java.util.List;
 
+/**
+ * 站点经纬度信息实体类
+ *
+ * @author cui7dr by 2019/08/19
+ *
+ * @remark TY in 2019/08/19
+ */
 public class LatlngBean {
     /**
-     * 站点经纬度信息实体类
-     *
-     * @author cui7dr by 2019/08/19
-     * <br/>
      * {"code":"0",
      * <p>
      * "data":{"data_info":[{"ddwd":33.987567,"ddjd":113.862191,"jzmc":"南外环梨园转盘","jzbh":"A411023001","id":1,"status":1}],
@@ -15,8 +18,6 @@ public class LatlngBean {
      * "page_data":{"currentPage":1,"currentRecord":0,"nextPage":1,"pageSize":20,"prePage":1,"totalPage":1,"totalRecord":8}},
      * <p>
      * "info":"成功"}
-     * <br/>
-     * @remark TY in 2019/08/19
      */
 
     private String code;
