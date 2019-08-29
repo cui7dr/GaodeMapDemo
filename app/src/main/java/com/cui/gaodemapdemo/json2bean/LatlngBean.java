@@ -48,7 +48,6 @@ public class LatlngBean {
         this.data = data;
     }
 
-
     /**
      * "data":
      * {"data_info":[{"ddwd":33.987567,"ddjd":113.862191,"jzmc":"南外环梨园转盘","jzbh":"A411023001","id":1,"status":1}],
