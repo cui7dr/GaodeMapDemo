@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,6 +52,7 @@ public class PointActivity extends AppCompatActivity {
     private AMap aMap;
     private MapView mapView;
     private Marker marker;
+    private Handler handler;
     private HttpUtil hu;
     private String id="1";
 
@@ -113,6 +115,14 @@ public class PointActivity extends AppCompatActivity {
         getLatlng();
 
     }
+
+    //定时刷新任务
+    Runnable runnable=new Runnable() {
+        @Override
+        public void run() {
+            handler.postDelayed(this,10000);
+        }
+    };
 
     //获取所有站点经纬度数据----(HttpUtil + Gson
     private void getLatlng() {
@@ -235,7 +245,7 @@ public class PointActivity extends AppCompatActivity {
                 return false;
             }
         });
-
+        handler.postDelayed(runnable,10000);
     }
 
     /**
