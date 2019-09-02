@@ -35,7 +35,7 @@ import java.util.Map;
 import okhttp3.Call;
 
 /**
- *点位信息方法
+ * 点位信息方法
  *
  * @author cui7dr by 2019/08/21
  */
@@ -54,7 +54,7 @@ public class PointActivity extends AppCompatActivity {
     private Marker marker;
     private Handler handler;
     private HttpUtil hu;
-    private String id="1";
+    private String id = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,10 +117,10 @@ public class PointActivity extends AppCompatActivity {
     }
 
     //定时刷新任务
-    Runnable runnable=new Runnable() {
+    Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            handler.postDelayed(this,10000);
+            handler.postDelayed(this, 10000);
         }
     };
 
@@ -167,28 +167,28 @@ public class PointActivity extends AppCompatActivity {
     }
 
     // 获取站点 id (HttpUtil + OkHttp
-    private void getId(){
-        title=(LinearLayout)findViewById(R.id.linearTitle);
-        context=(LinearLayout)findViewById(R.id.linearTitle);
-        tv_hphm=(TextView)findViewById(R.id.tv_hphm);
-        tv_time=(TextView)findViewById(R.id.tv_time);
-        tv_no=(TextView)findViewById(R.id.tv_no);
-        tv_opaque=(TextView)findViewById(R.id.tv_opaque);
-        tv_result=(TextView)findViewById(R.id.tv_result);
+    private void getId() {
+        title = (LinearLayout) findViewById(R.id.linearTitle);
+        context = (LinearLayout) findViewById(R.id.linearTitle);
+        tv_hphm = (TextView) findViewById(R.id.tv_hphm);
+        tv_time = (TextView) findViewById(R.id.tv_time);
+        tv_no = (TextView) findViewById(R.id.tv_no);
+        tv_opaque = (TextView) findViewById(R.id.tv_opaque);
+        tv_result = (TextView) findViewById(R.id.tv_result);
         aMap.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker1) {
-                String pointTitle=marker1.getTitle();
+                String pointTitle = marker1.getTitle();
                 if ("南外环梨园转盘".equals(pointTitle)) {
                     id = "1";
                 } else if ("许南路椹涧超限站".equals(pointTitle)) {
                     id = "4";
                 } else if ("许禹路禹毫铁路桥".equals(pointTitle)) {
                     id = "9";
-                } else if("南外环许繁路".equals(pointTitle)){
+                } else if ("南外环许繁路".equals(pointTitle)) {
                     id = "10";
-                }else{
-                    id="1";
+                } else {
+                    id = "1";
                 }
                 JSONObject urlJson = new JSONObject();
                 JSONObject paramsJson = new JSONObject();
@@ -205,47 +205,100 @@ public class PointActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                String request=paramsJson.toString().replaceAll(", ","");
-                String url=request.substring(12,request.length()-1);
+                String request = paramsJson.toString().replaceAll(", ", "");
+                String url = request.substring(12, request.length() - 1);
                 OkHttpUtils.get().url(url).build().connTimeOut(30000).readTimeOut(30000).writeTimeOut(30000).execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int i) {
-                        Toast.makeText(PointActivity.this,Const.OUT_TIME,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PointActivity.this, Const.OUT_TIME, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onResponse(String s, int i) {
-                        Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-                        PtDataBean ptData=gson.fromJson(s,PtDataBean.class);
-                        if(ptData!=null){
-                            PtDataBean.PointData.DataInfo  info=ptData.getPointData().getData_info();
+                        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+                        PtDataBean ptData = gson.fromJson(s, PtDataBean.class);
+                        if (ptData != null) {
+                            PtDataBean.PointData.DataInfo info = ptData.getPointData().getData_info();
                             tv_hphm.setText(info.getHphm());
-                            tv_time.setText(info.getCreateTime()+"");
+                            tv_time.setText(info.getCreateTime() + "");
                             tv_no.setText(info.getNojg());
-                            tv_opaque.setText(info.getYdz()+"");
+                            tv_opaque.setText(info.getYdz() + "");
                             tv_result.setText(info.getPdjgStr());
-                            if("黄色".equals(info.getHpysStr())){
+                            if ("黄色".equals(info.getHpysStr())) {
                                 tv_hphm.setBackgroundColor(0xffeeee00);
-                            }else if("黑色".equals(info.getHpysStr())){
+                            } else if ("黑色".equals(info.getHpysStr())) {
                                 tv_hphm.setTextColor(0xfffffafa);
                                 tv_hphm.setBackgroundColor(0xff000000);
-                            }else if("白色".equals(info.getHpysStr())){
+                            } else if ("白色".equals(info.getHpysStr())) {
                                 tv_hphm.setBackgroundColor(0xfffffafa);
-                            }else{
+                            } else {
                                 tv_hphm.setTextColor(0xfffffafa);
                                 tv_hphm.setBackgroundColor(0xff1874cd);
                             }
-                            title.setBackgroundColor("通过".equals(info.getPdjgStr())?0xff00ee00:0xffff0000);
-                            context.setBackgroundColor("通过".equals(info.getPdjgStr())?0xff00ee00:0xffff0000);
-                        }else{
-                            Toast.makeText(PointActivity.this,"",Toast.LENGTH_SHORT).show();
+                            title.setBackgroundColor("通过".equals(info.getPdjgStr()) ? 0xff00ee00 : 0xffff0000);
+                            context.setBackgroundColor("通过".equals(info.getPdjgStr()) ? 0xff00ee00 : 0xffff0000);
+                        } else {
+                            Toast.makeText(PointActivity.this, "", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
                 return false;
             }
         });
-        handler.postDelayed(runnable,10000);
+        handler.postDelayed(runnable, 1000);
+    }
+
+    // 根据点位 id 定时刷新 (HttpUtil + Gson
+    private void getRefreshData() {
+        title = (LinearLayout) findViewById(R.id.linearTitle);
+        context = (LinearLayout) findViewById(R.id.linearTitle);
+        tv_hphm = (TextView) findViewById(R.id.tv_hphm);
+        tv_time = (TextView) findViewById(R.id.tv_time);
+        tv_no = (TextView) findViewById(R.id.tv_no);
+        tv_opaque = (TextView) findViewById(R.id.tv_opaque);
+        tv_result = (TextView) findViewById(R.id.tv_result);
+        JSONObject urlJson = new JSONObject();
+        JSONObject paramsJson = new JSONObject();
+        paramsJson.put("ptInfoId", id);
+        urlJson.put("version", Const.version);
+        urlJson.put("method", Const.method_pointData_xc);
+        urlJson.put("pubKey", "");
+        urlJson.put("sign", "");
+        urlJson.put("data", paramsJson);
+        Map<String, String> headerMap = new HashMap<String, String>();
+        Map<String, String> paramsMap = new HashMap<String, String>();
+        paramsMap.put("requestURL", Const.url_xc);
+        try {
+            paramsMap.put("json", URLEncoder.encode(urlJson.toJSONString(), "UTF-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String result = hu.methodHttpsPost(headerMap, paramsMap);
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        PtDataBean ptData = gson.fromJson(result, PtDataBean.class);
+        if (ptData != null) {
+            PtDataBean.PointData.DataInfo info = ptData.getPointData().getData_info();
+            tv_hphm.setText(info.getHphm());
+            tv_time.setText(info.getCreateTime() + "");
+            tv_no.setText(info.getNojg());
+            tv_opaque.setText(info.getYdz() + "");
+            tv_result.setText(info.getPdjgStr());
+            if ("黄色".equals(info.getHpysStr())) {
+                tv_hphm.setBackgroundColor(0xffeeee00);
+            } else if ("黑色".equals(info.getHpysStr())) {
+                tv_hphm.setTextColor(0xfffffafa);
+                tv_hphm.setBackgroundColor(0xff000000);
+            } else if ("白色".equals(info.getHpysStr())) {
+                tv_hphm.setBackgroundColor(0xfffffafa);
+            } else {
+                tv_hphm.setTextColor(0xfffffafa);
+                tv_hphm.setBackgroundColor(0xff1874cd);
+            }
+            title.setBackgroundColor("通过".equals(info.getPdjgStr()) ? 0xff00ee00 : 0xffff0000);
+            context.setBackgroundColor("通过".equals(info.getPdjgStr()) ? 0xff00ee00 : 0xffff0000);
+        } else {
+            Toast.makeText(PointActivity.this, "", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
