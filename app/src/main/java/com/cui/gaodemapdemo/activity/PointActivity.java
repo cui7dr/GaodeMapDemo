@@ -120,6 +120,7 @@ public class PointActivity extends AppCompatActivity {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
+            getRefreshData();
             handler.postDelayed(this, 10000);
         }
     };
