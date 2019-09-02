@@ -20,6 +20,7 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import com.cui.gaodemapdemo.R;
 import com.cui.gaodemapdemo.base.Const;
 import com.cui.gaodemapdemo.json2bean.LatlngBean;
+import com.cui.gaodemapdemo.json2bean.PtDataBean;
 import com.cui.gaodemapdemo.util.HttpUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -205,12 +206,36 @@ public class PointActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String s, int i) {
                         Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-
+                        PtDataBean ptData=gson.fromJson(s,PtDataBean.class);
+                        if(ptData!=null){
+                            PtDataBean.PointData.DataInfo  info=ptData.getPointData().getData_info();
+                            tv_hphm.setText(info.getHphm());
+                            tv_time.setText(info.getCreateTime()+"");
+                            tv_no.setText(info.getNojg());
+                            tv_opaque.setText(info.getYdz()+"");
+                            tv_result.setText(info.getPdjgStr());
+                            if("黄色".equals(info.getHpysStr())){
+                                tv_hphm.setBackgroundColor(0xffeeee00);
+                            }else if("黑色".equals(info.getHpysStr())){
+                                tv_hphm.setTextColor(0xfffffafa);
+                                tv_hphm.setBackgroundColor(0xff000000);
+                            }else if("白色".equals(info.getHpysStr())){
+                                tv_hphm.setBackgroundColor(0xfffffafa);
+                            }else{
+                                tv_hphm.setTextColor(0xfffffafa);
+                                tv_hphm.setBackgroundColor(0xff1874cd);
+                            }
+                            title.setBackgroundColor("通过".equals(info.getPdjgStr())?0xff00ee00:0xffff0000);
+                            context.setBackgroundColor("通过".equals(info.getPdjgStr())?0xff00ee00:0xffff0000);
+                        }else{
+                            Toast.makeText(PointActivity.this,"",Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 return false;
             }
         });
+
     }
 
     /**
