@@ -113,7 +113,7 @@ public class PointActivity extends AppCompatActivity {
 //            getWindow().setNavigationBarColor(ContextCompat.getColor(this,R.color));
 //        }
         getLatlng();
-
+        getId();
     }
 
     //定时刷新任务
