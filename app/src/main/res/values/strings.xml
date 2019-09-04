@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">GaodeMapDemo</string>
     <string name="title_activity_login">LoginActivity</string>
-    
+
     <string name="cancel">取消</string>
     <string name="setting">设置</string>
 
@@ -15,4 +15,6 @@
     <string name="no">NO</string>
     <string name="opaque">不透光</string>
     <string name="result">判定结果</string>
+
+    <string name="jzmc">站点名称</string>
 </resources>
